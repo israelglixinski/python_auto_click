@@ -1,0 +1,2 @@
+vertical = 300
+horizontal = 800
