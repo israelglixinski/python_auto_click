@@ -7,7 +7,7 @@ caminho_imagem = os.path.join("imagem", "imagem_alvo.png")
 caminho_config = "config.txt"
 
 def ler_config():
-    config = {"horizontal": None, "vertical": None}
+    config = {"horizontal": None, "vertical": None, "tempo": None}
     try:
         with open(caminho_config, "r") as f:
             for linha in f:
@@ -19,13 +19,14 @@ def ler_config():
                         config[chave] = valor
     except Exception as e:
         print(f"Erro ao ler config.txt: {e}")
-    return config["horizontal"], config["vertical"]
+    return config["horizontal"], config["vertical"], config["tempo"]
 
 def procurar_e_clicar():
+    global tempo
     print("Verificando imagem na tela...")
     local = pyautogui.locateOnScreen(caminho_imagem, confidence=0.8)
     if local:
-        horizontal, vertical = ler_config()
+        horizontal, vertical, tempo = ler_config()
         if horizontal is not None and vertical is not None:
             print(f"Imagem encontrada! Clicando em ({horizontal}, {vertical})")
             pyautogui.click(x=horizontal, y=vertical)
@@ -35,13 +36,15 @@ def procurar_e_clicar():
         print("Imagem não encontrada.")
 
 def loop_monitoramento():
+    global tempo
+    horizontal, vertical, tempo = ler_config()
     while True:
         try:
             procurar_e_clicar()
             print('sim')
         except:
             print('não')
-        time.sleep(5)
+        time.sleep(tempo)
 
 if __name__ == "__main__":
     loop_monitoramento()
